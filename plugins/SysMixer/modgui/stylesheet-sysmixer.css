@@ -1,0 +1,276 @@
+/*
+ * System Mixer — a pedal that grows with the channels in use.
+ *
+ * script-sysmixer.js marks a row ".mx-used" (and un-hides its two input jacks)
+ * once something is connected to it, so an empty mixer is just a header, a
+ * hint and the master section, and each send adds one 72 px row.
+ *
+ * Geometry is load-bearing: a visible row sits beside its L/R input jacks
+ * (36 px pitch = 56 px jack box - 20 px overlap). The header is 40 px, so
+ * the jack stack starts at 40 + 36 - 48 = 28 px (48 = centre of a jack pair
+ * from the first jack's top). Hidden rows and hidden jacks drop out of the
+ * flow together, so the pairing holds. Change these numbers together.
+ */
+
+/* ============================ Frame ============================ */
+.sysmixer-pedal {
+    position: absolute;
+    width: 300px;
+    min-height: 180px;   /* room for the two output jacks */
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #2b2e33 0%, #1f2125 100%);
+    border-radius: 10px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 4px 10px rgba(0, 0, 0, 0.5);
+    color: #c9ced6;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.sysmixer-pedal .mod-drag-handle {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    cursor: move;
+}
+.sysmixer-pedal .mx-head,
+.sysmixer-pedal .mx-rows,
+.sysmixer-pedal .mx-hint,
+.sysmixer-pedal .mx-foot,
+.sysmixer-pedal .mod-pedal-input,
+.sysmixer-pedal .mod-pedal-output {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================ Header ============================ */
+.sysmixer-pedal .mx-head {
+    height: 40px;
+    flex: none;
+    pointer-events: none;
+}
+.sysmixer-pedal .mod-plugin-name {
+    position: absolute;
+    top: 12px; left: 12px;
+}
+.sysmixer-pedal .mod-plugin-name h1 {
+    margin: 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #e8ecf2; font-weight: 700;
+}
+.sysmixer-pedal .mx-add {
+    position: absolute;
+    top: 9px; right: 10px;
+    width: 22px; height: 22px; line-height: 21px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 4px;
+    background: #3a3d43;
+    color: #e8ecf2;
+    cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+}
+.sysmixer-pedal .mx-add:hover { background: #4a4e56; }
+
+/* ============================ Channel rows ============================ */
+.sysmixer-pedal .mx-row {
+    height: 72px;
+    box-sizing: border-box;
+    padding: 3px 10px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: grid;
+    grid-template-columns: 44px 34px 16px 26px 1fr 16px;
+    grid-template-rows: 14px 54px;
+    column-gap: 6px;
+    align-items: center;
+    justify-items: center;
+}
+.sysmixer-pedal .mx-row:not(.mx-used) { display: none; }
+
+.sysmixer-pedal .mx-label {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    display: flex;
+    gap: 6px;
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+.sysmixer-pedal .mx-num  { color: rgba(201, 206, 214, 0.5); font-weight: 700; }
+.sysmixer-pedal .mx-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #e8ecf2;
+    font-weight: 700;
+}
+/* ST/MO from the wiring (both legs connected or not), set by the script */
+.sysmixer-pedal .mx-mode { font-size: 9px; font-weight: 700; color: rgba(201, 206, 214, 0.4); }
+.sysmixer-pedal .mx-mode.stereo { color: #6fb7ff; }
+
+.sysmixer-pedal .mx-knob {
+    background-image: url(/resources/knobs/black.png{{{ns}}});
+    background-repeat: no-repeat;
+    background-position: left center;
+    flex: none;
+}
+.sysmixer-pedal .mx-gain,
+.sysmixer-pedal .mx-master { width: 42px; height: 42px; background-size: auto 42px; }
+.sysmixer-pedal .mx-pan    { width: 32px; height: 32px; background-size: auto 32px; }
+
+/* Knob + tiny live value underneath (text set by script-sysmixer.js). */
+.sysmixer-pedal .mx-ctl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sysmixer-pedal .mx-val {
+    height: 10px;
+    margin-top: 1px;
+    font-size: 9px;
+    line-height: 10px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(201, 206, 214, 0.75);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.sysmixer-pedal .mx-reset,
+.sysmixer-pedal .mx-unsend {
+    width: 16px; height: 16px; line-height: 16px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 50%;
+    color: rgba(201, 206, 214, 0.55);
+    cursor: pointer;
+    user-select: none;
+}
+.sysmixer-pedal .mx-reset:hover  { color: #e8ecf2; background: #3a3d43; }
+.sysmixer-pedal .mx-unsend:hover { color: #fff; background: #d8442f; }
+
+.sysmixer-pedal .mx-mute {
+    width: 26px; height: 20px; line-height: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    background: #3a3d43;
+    color: rgba(201, 206, 214, 0.7);
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    user-select: none;
+}
+.sysmixer-pedal .mx-mute.on {
+    background: #d8442f;
+    color: #fff;
+    box-shadow: 0 0 6px rgba(216, 68, 47, 0.7);
+}
+
+/* Meter: fixed gradient, a dark cover slides back to reveal it.
+   Range -60..+12 dB, so 0 dB sits at 83.3 % (the tick). */
+.sysmixer-pedal .mx-meter {
+    position: relative;
+    justify-self: stretch;
+    height: 8px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: linear-gradient(90deg,
+        #2fbf5a 0%, #2fbf5a 66.6%,
+        #e6c435 66.6%, #e6c435 83.3%,
+        #e0442f 83.3%, #e0442f 100%);
+    pointer-events: none;
+}
+.sysmixer-pedal .mx-meter::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 83.3%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.5);
+}
+.sysmixer-pedal .mx-cover {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 100%;
+    background: #121316;
+}
+
+/* ============================ Empty state ============================ */
+.sysmixer-pedal .mx-hint {
+    flex: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    line-height: 16px;
+    color: rgba(201, 206, 214, 0.5);
+    pointer-events: none;
+}
+.sysmixer-pedal.mx-empty .mx-hint { display: flex; }
+
+/* ============================ Footer ============================ */
+.sysmixer-pedal .mx-foot {
+    height: 62px;
+    flex: none;
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sysmixer-pedal .mod-light      { position: absolute; top: 24px; left: 14px; }
+.sysmixer-pedal .mod-footswitch { position: absolute; top: 11px; left: 34px; }
+.sysmixer-pedal .mx-foot .mx-ctl { position: absolute; top: 4px; left: 96px; }
+.sysmixer-pedal .mx-masters {
+    position: absolute;
+    top: 22px; left: 160px; right: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ============================ Jacks ============================
+   Inputs of unused channels are hidden by the script (.mx-hidden); the
+   rest overlap their 56 px boxes (the visible plug is ~33 px) for a 36 px
+   pitch, so each visible pair lines up with its row. Outputs sit at the top
+   right with MOD's normal spacing; cables find them wherever they are. */
+.sysmixer-pedal.mod-pedal .mod-pedal-input {
+    position: absolute;
+    top: 28px;
+}
+.sysmixer-pedal.mod-pedal .mod-pedal-input .mod-input {
+    margin-bottom: -20px;
+}
+.sysmixer-pedal.mod-pedal .mod-pedal-input .mod-input.mx-hidden {
+    display: none;
+}
+.sysmixer-pedal.mod-pedal .mod-pedal-output {
+    position: absolute;
+    top: 40px;
+}
+
+/* ============================ Menus ============================
+   The plugin's own right-click / "+" menu, appended to <body> by the script
+   (plugin stylesheets are global, so these rules still reach it). */
+.sysmixer-menu {
+    position: fixed;
+    z-index: 10000;
+    min-width: 160px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 4px 0;
+    background: #1f2125;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    color: #e8ecf2;
+    font-size: 13px;
+}
+.sysmixer-menu > div { padding: 5px 14px; cursor: pointer; white-space: nowrap; }
+.sysmixer-menu > div:hover { background: #883996; }
+.sysmixer-menu > div.sysmixer-menu-empty { color: rgba(201, 206, 214, 0.5); cursor: default; }
+.sysmixer-menu > div.sysmixer-menu-empty:hover { background: none; }
+
+/* ============================ Drag preview ============================
+   Dragging the mixer in from the plugin library shows a "dummy" render where
+   the script never runs: show the empty-mixer look, not all 32 input jacks. */
+.mod-pedal.dummy .sysmixer-pedal .mod-pedal-input { display: none; }
+.mod-pedal.dummy .sysmixer-pedal .mx-hint { display: flex; }

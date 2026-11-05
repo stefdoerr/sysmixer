@@ -1,0 +1,194 @@
+<!--
+  System Mixer pedal. Shows only the channels something is connected to:
+  script-sysmixer.js watches the input jacks, reveals a channel's row (and its
+  two jacks) when a cable arrives, and names it after the plugin feeding it.
+  Each visible row sits beside its L/R jack pair (row height and jack pitch
+  live in the stylesheet -- change together). Knobs are bound by MOD-UI;
+  everything with mx-* attributes is ours.
+-->
+<div class="mod-pedal sysmixer-pedal">
+
+    <div mod-role="drag-handle" class="mod-drag-handle"></div>
+
+    <div class="mx-head">
+        <div class="mod-plugin-name"><h1>{{label}}</h1></div>
+        <div class="mx-add" title="Send a plugin to the mixer">+</div>
+    </div>
+
+    <div class="mx-rows">
+        <div class="mx-row" mx-channel="1">
+            <div class="mx-label"><span class="mx-num">1</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain1"></div><span class="mx-val" mx-symbol="gain1"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan1"></div><span class="mx-val" mx-symbol="pan1"></span></div>
+            <div class="mx-reset" mx-channel="1" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute1">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level1"></div></div>
+            <div class="mx-unsend" mx-channel="1" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="2">
+            <div class="mx-label"><span class="mx-num">2</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain2"></div><span class="mx-val" mx-symbol="gain2"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan2"></div><span class="mx-val" mx-symbol="pan2"></span></div>
+            <div class="mx-reset" mx-channel="2" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute2">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level2"></div></div>
+            <div class="mx-unsend" mx-channel="2" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="3">
+            <div class="mx-label"><span class="mx-num">3</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain3"></div><span class="mx-val" mx-symbol="gain3"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan3"></div><span class="mx-val" mx-symbol="pan3"></span></div>
+            <div class="mx-reset" mx-channel="3" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute3">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level3"></div></div>
+            <div class="mx-unsend" mx-channel="3" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="4">
+            <div class="mx-label"><span class="mx-num">4</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain4"></div><span class="mx-val" mx-symbol="gain4"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan4"></div><span class="mx-val" mx-symbol="pan4"></span></div>
+            <div class="mx-reset" mx-channel="4" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute4">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level4"></div></div>
+            <div class="mx-unsend" mx-channel="4" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="5">
+            <div class="mx-label"><span class="mx-num">5</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain5"></div><span class="mx-val" mx-symbol="gain5"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan5"></div><span class="mx-val" mx-symbol="pan5"></span></div>
+            <div class="mx-reset" mx-channel="5" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute5">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level5"></div></div>
+            <div class="mx-unsend" mx-channel="5" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="6">
+            <div class="mx-label"><span class="mx-num">6</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain6"></div><span class="mx-val" mx-symbol="gain6"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan6"></div><span class="mx-val" mx-symbol="pan6"></span></div>
+            <div class="mx-reset" mx-channel="6" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute6">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level6"></div></div>
+            <div class="mx-unsend" mx-channel="6" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="7">
+            <div class="mx-label"><span class="mx-num">7</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain7"></div><span class="mx-val" mx-symbol="gain7"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan7"></div><span class="mx-val" mx-symbol="pan7"></span></div>
+            <div class="mx-reset" mx-channel="7" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute7">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level7"></div></div>
+            <div class="mx-unsend" mx-channel="7" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="8">
+            <div class="mx-label"><span class="mx-num">8</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain8"></div><span class="mx-val" mx-symbol="gain8"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan8"></div><span class="mx-val" mx-symbol="pan8"></span></div>
+            <div class="mx-reset" mx-channel="8" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute8">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level8"></div></div>
+            <div class="mx-unsend" mx-channel="8" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="9">
+            <div class="mx-label"><span class="mx-num">9</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain9"></div><span class="mx-val" mx-symbol="gain9"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan9"></div><span class="mx-val" mx-symbol="pan9"></span></div>
+            <div class="mx-reset" mx-channel="9" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute9">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level9"></div></div>
+            <div class="mx-unsend" mx-channel="9" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="10">
+            <div class="mx-label"><span class="mx-num">10</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain10"></div><span class="mx-val" mx-symbol="gain10"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan10"></div><span class="mx-val" mx-symbol="pan10"></span></div>
+            <div class="mx-reset" mx-channel="10" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute10">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level10"></div></div>
+            <div class="mx-unsend" mx-channel="10" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="11">
+            <div class="mx-label"><span class="mx-num">11</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain11"></div><span class="mx-val" mx-symbol="gain11"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan11"></div><span class="mx-val" mx-symbol="pan11"></span></div>
+            <div class="mx-reset" mx-channel="11" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute11">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level11"></div></div>
+            <div class="mx-unsend" mx-channel="11" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="12">
+            <div class="mx-label"><span class="mx-num">12</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain12"></div><span class="mx-val" mx-symbol="gain12"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan12"></div><span class="mx-val" mx-symbol="pan12"></span></div>
+            <div class="mx-reset" mx-channel="12" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute12">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level12"></div></div>
+            <div class="mx-unsend" mx-channel="12" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="13">
+            <div class="mx-label"><span class="mx-num">13</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain13"></div><span class="mx-val" mx-symbol="gain13"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan13"></div><span class="mx-val" mx-symbol="pan13"></span></div>
+            <div class="mx-reset" mx-channel="13" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute13">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level13"></div></div>
+            <div class="mx-unsend" mx-channel="13" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="14">
+            <div class="mx-label"><span class="mx-num">14</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain14"></div><span class="mx-val" mx-symbol="gain14"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan14"></div><span class="mx-val" mx-symbol="pan14"></span></div>
+            <div class="mx-reset" mx-channel="14" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute14">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level14"></div></div>
+            <div class="mx-unsend" mx-channel="14" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="15">
+            <div class="mx-label"><span class="mx-num">15</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain15"></div><span class="mx-val" mx-symbol="gain15"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan15"></div><span class="mx-val" mx-symbol="pan15"></span></div>
+            <div class="mx-reset" mx-channel="15" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute15">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level15"></div></div>
+            <div class="mx-unsend" mx-channel="15" title="Remove from mixer">&#x2715;</div>
+        </div>
+        <div class="mx-row" mx-channel="16">
+            <div class="mx-label"><span class="mx-num">16</span><span class="mx-name"></span><span class="mx-mode"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-gain mod-knob-image" mod-role="input-control-port" mod-port-symbol="gain16"></div><span class="mx-val" mx-symbol="gain16"></span></div>
+            <div class="mx-ctl"><div class="mx-knob mx-pan mod-knob-image" mod-role="input-control-port" mod-port-symbol="pan16"></div><span class="mx-val" mx-symbol="pan16"></span></div>
+            <div class="mx-reset" mx-channel="16" title="Reset gain + pan">&#x21BA;</div>
+            <div class="mx-mute" mx-symbol="mute16">M</div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level16"></div></div>
+            <div class="mx-unsend" mx-channel="16" title="Remove from mixer">&#x2715;</div>
+        </div>
+    </div>
+
+    <div class="mx-hint">Right-click a plugin<br>&rarr; Send to mixer</div>
+
+    <div class="mx-foot">
+        <div class="mod-light on" mod-role="bypass-light"></div>
+        <div class="mod-footswitch" mod-role="bypass"></div>
+        <div class="mx-ctl"><div class="mx-knob mx-master mod-knob-image" mod-role="input-control-port" mod-port-symbol="master"></div><span class="mx-val" mx-symbol="master"></span></div>
+        <div class="mx-masters">
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level_l"></div></div>
+            <div class="mx-meter"><div class="mx-cover" mx-symbol="level_r"></div></div>
+        </div>
+    </div>
+
+    <div class="mod-pedal-input">
+        {{#effect.ports.audio.input}}
+        <div class="mod-input mod-input-disconnected" title="{{name}}"
+             mod-role="input-audio-port" mod-port-symbol="{{symbol}}">
+            <div class="mod-pedal-input-image"></div>
+        </div>
+        {{/effect.ports.audio.input}}
+    </div>
+    <div class="mod-pedal-output">
+        {{#effect.ports.audio.output}}
+        <div class="mod-output mod-output-disconnected" title="{{name}}"
+             mod-role="output-audio-port" mod-port-symbol="{{symbol}}">
+            <div class="mod-pedal-output-image"></div>
+        </div>
+        {{/effect.ports.audio.output}}
+    </div>
+
+</div>

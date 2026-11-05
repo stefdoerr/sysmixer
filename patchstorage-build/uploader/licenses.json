@@ -1,0 +1,115 @@
+{
+    "4184": [
+        "afl-3-0"
+    ],
+    "4173": [
+        "apache-2-0",
+        "http://usefulinc.com/doap/licenses/asl20"
+    ],
+    "4185": [
+        "artistic-2-0",
+        "http://opensource.org/licenses/artistic-2.0"
+    ],
+    "4186": [
+        "bsl-1-0",
+        "http://spdx.org/licenses/bsl-1.0"
+    ],
+    "4174": [
+        "bsd-2-clause"
+    ],
+    "4175": [
+        "bsd-3-clause"
+    ],
+    "4187": [
+        "bsd-3-clause-clear"
+    ],
+    "4190": [
+        "cc-by-4-0"
+    ],
+    "4191": [
+        "cc-by-sa-4-0"
+    ],
+    "4188": [
+        "cc"
+    ],
+    "4189": [
+        "cc0-1-0"
+    ],
+    "4201": [
+        "custom"
+    ],
+    "4192": [
+        "wtfpl"
+    ],
+    "4176": [
+        "epl-2-0"
+    ],
+    "4193": [
+        "ecl-2-0"
+    ],
+    "4194": [
+        "eupl-1-1"
+    ],
+    "4172": [
+        "agpl-3-0"
+    ],
+    "4195": [
+        "gpl",
+        "http://usefulinc.com/doap/licenses/gpl"
+    ],
+    "4177": [
+        "gpl-2-0",
+        "gplv2",
+        "gpl v2+",
+        "http://opensource.org/licenses/gpl-2.0",
+        "https://spdx.org/licenses/gpl-2.0-or-later",
+        "http://spdx.org/licenses/gpl-2.0-or-later",
+        "gplv2+",
+        "gpl v2"
+    ],
+    "4178": [
+        "gpl-3-0",
+        "http://opensource.org/licenses/gpl-3.0",
+        "http://www.gnu.org/licenses/gpl-3.0.html",
+        "gpl v3+",
+        "gplv3+",
+        "gplv3.0",
+        "gpl v3.0",
+        "http://spdx.org/licenses/gpl-3.0-or-later.html"
+    ],    
+    "4196": [
+        "lgpl",
+        "http://usefulinc.com/doap/licenses/lgpl"
+    ],
+    "4179": [
+        "lgpl-2-1"
+    ],
+    "4180": [
+        "lgpl-3-0",
+        "https://opensource.org/licenses/lgpl-3.0",
+        "lgpl3"
+    ],
+    "4197": [
+        "isc",
+        "http://opensource.org/licenses/isc",
+        "http://spdx.org/licenses/isc.html",
+        "https://spdx.org/licenses/isc"
+    ],
+    "4199": [
+        "ms-pl"
+    ],
+    "4181": [
+        "mit",
+        "https://opensource.org/licenses/mit",
+        "http://opensource.org/licenses/mit"
+    ],
+    "4182": [
+        "mpl-2-0"
+    ],
+    "4200": [
+        "osl-3-0"
+    ],
+    "4183": [
+        "unlicense"
+    ]
+}

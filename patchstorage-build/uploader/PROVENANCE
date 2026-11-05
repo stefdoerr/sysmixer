@@ -1,0 +1,12 @@
+Vendored (copied, not a submodule) from:
+  https://github.com/patchstorage/patchstorage-lv2-uploader
+  commit 4141b23c201834a10382275918b97cf166e07274 (2024-05-05)
+
+Files: uploader.py, bundles.py, licenses.json, categories.json
+License: GNU GPL-3.0 (see LICENSE in this directory).
+
+Only these four files are used. The upstream community plugins.json is NOT
+vendored — this repo generates a per-plugin plugins.json at publish time from the
+repo-root patchstorage.json (see patchstorage-build/prepare.sh).
+
+To re-sync: copy the four files from a fresh checkout and update the commit above.

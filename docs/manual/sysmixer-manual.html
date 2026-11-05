@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>System Mixer User Manual</title>
+<style>
+/* ==========================================================================
+   Print source. Rendered to PDF with headless Chrome via `make manual` (A4).
+   Swap the palette to match your pedal's modgui face — these are neutral
+   template colors.
+   ========================================================================== */
+
+:root {
+    --dark:   #1f2125;   /* cover background — the pedal face            */
+    --dark2:  #2b2e33;
+    --accent: #6fb7ff;   /* the pedal's ST blue                          */
+    --acc-d:  #2f6fb0;   /* darker blue for headings on white            */
+    --ink:    #26292e;   /* body text                                    */
+    --muted:  #5f666e;   /* secondary text                               */
+    --line:   #dcdfe3;   /* hairlines / table borders                    */
+    --wash:   #f4f2ec;   /* light panel background                       */
+}
+
+/* A4 with a full-bleed first page: the cover supplies its own margins.   */
+@page        { size: A4; margin: 18mm 16mm; }
+@page :first { margin: 0; }
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    font-size: 10pt;
+    line-height: 1.55;
+}
+
+h2 {
+    font-size: 17pt;
+    color: var(--acc-d);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 4px;
+    margin: 0 0 10px 0;
+    break-after: avoid;
+}
+h3 {
+    font-size: 11.5pt;
+    color: var(--ink);
+    margin: 14px 0 6px 0;
+    break-after: avoid;
+}
+p  { margin: 0 0 8px 0; }
+code {
+    font-family: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+    background: var(--wash);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-size: 8.5pt;
+}
+pre {
+    font-family: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+    background: var(--wash);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-size: 8pt;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    margin: 6px 0 10px 0;
+    break-inside: avoid;
+}
+
+/* Each <section> is a chapter and starts on a fresh page. Use .flow on a
+   section that should continue on the same page instead.                  */
+section { break-before: page; }
+section.flow { break-before: auto; margin-top: 22px; }
+.pb { break-before: page; }
+
+/* ---- cover ------------------------------------------------------------
+   Full-bleed dark page. Height is 296mm — 1mm SHY of A4 on purpose: at
+   exactly 297mm print rounding can spill a blank page 2.                  */
+.cover {
+    width: 210mm;
+    height: 296mm;
+    background:
+        radial-gradient(ellipse at 30% 10%, rgba(111, 183, 255, 0.14), transparent 55%),
+        radial-gradient(ellipse at 85% 90%, rgba(47, 111, 176, 0.18), transparent 60%),
+        linear-gradient(160deg, var(--dark) 0%, var(--dark2) 60%, #1a1d21 100%);
+    color: #f0ede6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20mm;
+}
+.cover .brand {
+    letter-spacing: 0.55em;
+    font-size: 10pt;
+    color: rgba(240, 237, 230, 0.6);
+    text-transform: uppercase;
+    margin-bottom: 4mm;
+}
+.cover h1 {
+    font-size: 34pt;
+    white-space: nowrap;
+    letter-spacing: 0.28em;
+    margin: 0 0 3mm 0.28em;    /* left inset balances the letter-spacing tail */
+    color: #f7f4ee;
+    font-weight: 700;
+}
+.cover .tagline {
+    font-size: 13pt;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-bottom: 14mm;
+}
+.cover img, .cover .shot-placeholder {
+    width: 78mm;
+    border-radius: 4mm;
+    box-shadow: 0 6mm 18mm rgba(0, 0, 0, 0.55);
+    margin-bottom: 16mm;
+}
+.cover .shot-placeholder {
+    height: 60mm;
+    border: 1px dashed rgba(240, 237, 230, 0.4);
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(240, 237, 230, 0.5);
+    font-size: 10pt;
+}
+.cover .subtitle {
+    font-size: 12pt;
+    color: rgba(240, 237, 230, 0.9);
+    margin-bottom: 2mm;
+}
+.cover .edition {
+    font-size: 9.5pt;
+    color: rgba(240, 237, 230, 0.55);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ---- pedal image with numbered callout badges --------------------------
+   Wrap the modgui screenshot in .pedal-map and drop absolutely-positioned
+   .pin badges over each control; the same numbers appear as .badge chips in
+   the control tables/cards below, so names map to positions at a glance.  */
+.pedal-map {
+    position: relative;
+    width: 72mm;
+    margin: 4mm auto 6mm auto;
+    break-inside: avoid;
+}
+.pedal-map img {
+    width: 100%;
+    display: block;
+    border-radius: 3mm;
+    box-shadow: 0 2mm 6mm rgba(34, 37, 42, 0.35);
+}
+.badge, .pedal-map .pin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--acc-d);
+    color: #fff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    line-height: 1;
+    flex: none;
+}
+.pedal-map .pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.85);
+}
+
+/* ---- control tables & knob cards ---- */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 6px 0 12px 0;
+    break-inside: avoid;
+}
+th, td {
+    border: 1px solid var(--line);
+    padding: 5px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+th {
+    background: var(--wash);
+    color: var(--acc-d);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+td.ctl { white-space: nowrap; font-weight: 700; }
+
+.knob-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 6px;
+}
+.knob {
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 7px 9px 5px 9px;
+    break-inside: avoid;
+}
+.knob h4 {
+    margin: 0 0 3px 0;
+    font-size: 10.5pt;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.knob p { font-size: 9.2pt; margin-bottom: 4px; }
+.knob ul {
+    margin: 0;
+    padding-left: 14px;
+    font-size: 8.8pt;
+    color: var(--muted);
+}
+.knob li { margin-bottom: 1px; }
+.knob li b { color: var(--ink); font-weight: 600; }
+
+/* ---- tips / faq ---- */
+
+dl.faq { margin: 6px 0; }
+dl.faq dt {
+    font-weight: 700;
+    margin-top: 9px;
+    break-after: avoid;
+}
+dl.faq dd {
+    margin: 1px 0 0 0;
+    font-size: 9.4pt;
+}
+dl.faq .qa { break-inside: avoid; }
+
+/* ---- misc ---- */
+
+.note {
+    background: var(--wash);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    padding: 6px 10px;
+    font-size: 9.3pt;
+    margin: 8px 0;
+    break-inside: avoid;
+}
+ol.steps { padding-left: 18px; margin: 4px 0 8px 0; }
+ol.steps li { margin-bottom: 5px; }
+a { color: var(--acc-d); text-decoration: none; }
+.credits {
+    margin-top: 14px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    font-size: 8.8pt;
+    color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <div class="brand">Stefan</div>
+    <h1>SYSTEM MIXER</h1>
+    <div class="tagline">Every plugin to one stereo out &mdash; no cable spaghetti.</div>
+    <img src="../../plugins/SysMixer/modgui/screenshot-sysmixer.png" alt="The System Mixer pedal">
+    <div class="subtitle">16-channel stereo mixer for MOD Dwarf and MOD Desktop</div>
+    <div class="edition">User Manual &middot; November 2026 edition</div>
+</div>
+
+<section>
+    <h2>What the System Mixer does</h2>
+    <p>
+        The System Mixer is the <b>one mixer at the end of your pedalboard</b>. Instead of
+        dragging two cables from every plugin to the outputs, you right-click a plugin and
+        choose <b>Send to mixer</b>. It gets its own channel with a level knob, a pan knob,
+        a mute button and a level meter, and the mixer sends everything to the outputs.
+    </p>
+    <p>
+        The pedal only shows the channels you are using, so with three plugins sent it is
+        three slim rows tall. It takes up to 16 plugins, mono or stereo, and costs very
+        little processing power &mdash; less than a single stock MOD mixer.
+    </p>
+    <div class="note">
+        <b>Good to know:</b> the mixer is completely clean. It only sets levels and
+        positions in the stereo picture; your tone is untouched.
+    </div>
+
+    <h2 style="margin-top:18px">Quick start</h2>
+    <ol class="steps">
+        <li><b>Add the System Mixer</b> to your pedalboard (brand <b>Stefan</b>). It starts
+            small: a header, a hint and the master knob.</li>
+        <li><b>Right-click a plugin</b> that makes sound and choose <b>Send to mixer</b>.
+            The plugin appears as a new row on the mixer, and the mixer connects itself to
+            the outputs the first time.</li>
+        <li><b>Repeat</b> for every plugin you want to hear, or press <b>+</b> on the mixer
+            and pick from the list.</li>
+        <li><b>Play</b>, and balance the rows with their GAIN and PAN knobs.</li>
+    </ol>
+</section>
+
+<section>
+    <h2>The pedal</h2>
+    <div class="pedal-map">
+        <img src="../../plugins/SysMixer/modgui/screenshot-sysmixer.png" alt="System Mixer control layout">
+        <span class="pin" style="left:93%; top:6%;">1</span>
+        <span class="pin" style="left:27%; top:15.5%;">2</span>
+        <span class="pin" style="left:10.7%; top:24.4%;">3</span>
+        <span class="pin" style="left:25.7%; top:24.4%;">4</span>
+        <span class="pin" style="left:35.7%; top:26.6%;">5</span>
+        <span class="pin" style="left:45%; top:26.4%;">6</span>
+        <span class="pin" style="left:70%; top:26.4%;">7</span>
+        <span class="pin" style="left:93.8%; top:26.6%;">8</span>
+        <span class="pin" style="left:39%; top:88%;">9</span>
+    </div>
+
+    <div class="knob-grid">
+        <div class="knob">
+            <h4><span class="badge">1</span> + (send)</h4>
+            <p>Lists every plugin on the board that has audio outputs and is not in the
+               mixer yet. Pick one to send it.</p>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">2</span> Channel name</h4>
+            <p>The plugin feeding this row, with <b>ST</b> (stereo: both outputs connected)
+               or <b>MO</b> (mono) next to it.</p>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">3</span> GAIN</h4>
+            <p>How loud this plugin is in the mix. The number under the knob is in dB.</p>
+            <ul>
+                <li><b>Fully left:</b> silent (shown as &minus;inf)</li>
+                <li><b>0.0 (default):</b> exactly as loud as the plugin plays</li>
+                <li><b>Fully right (+12):</b> a clear boost for a quiet plugin</li>
+            </ul>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">4</span> PAN</h4>
+            <p>Where the plugin sits between the left and right speaker.</p>
+            <ul>
+                <li><b>C (default):</b> in the middle</li>
+                <li><b>L100 / R100:</b> all the way to one side</li>
+                <li><b>Stereo plugins:</b> PAN turns down the opposite side, keeping the
+                    plugin&rsquo;s own stereo picture</li>
+            </ul>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">5</span> &#x21BA; Reset</h4>
+            <p>Puts GAIN back to 0 and PAN back to the centre for this row.</p>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">6</span> M (mute)</h4>
+            <p>Silences the row; it lights red while muted. The meter keeps showing the
+               plugin&rsquo;s level, so you can see it is still playing.</p>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">7</span> Meter</h4>
+            <p>How hot the plugin arrives, before GAIN. The white tick is 0&nbsp;dB; red
+               beyond it means the plugin itself is too loud.</p>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">8</span> &#x2715; Remove</h4>
+            <p>Takes this plugin out of the mixer. Its cables to the mixer are unplugged and
+               nothing else is connected, so it goes quiet.</p>
+        </div>
+        <div class="knob">
+            <h4><span class="badge">9</span> MASTER</h4>
+            <p>The level of the whole mix, with the left and right output meters beside it.
+               0.0 leaves the mix as it is.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Sending and removing</h2>
+    <h3>Send to mixer</h3>
+    <p>
+        Right-click the body of any plugin with audio outputs and choose
+        <b>Send to mixer</b>, or use <b>+</b> on the mixer. The plugin takes the first free
+        channel. A stereo plugin uses both sides of it; a mono plugin plays in the middle
+        and its PAN moves it left or right. If the plugin was cabled straight to the
+        outputs, those cables are removed, so you never hear it twice. Cables to other
+        plugins stay as they are.
+    </p>
+    <p>
+        On the starless firmware the new cables become <b>teleports</b>: a short stub
+        with a label at the plugin and at the mixer, instead of a cable across the board.
+        You can rename the label, or turn it back into a normal cable, like any teleport.
+    </p>
+    <h3>Remove from mixer</h3>
+    <p>
+        Right-click the plugin again and choose <b>Remove from mixer</b>, or press
+        &#x2715; on its row. The plugin is unplugged from the mixer and its row disappears.
+    </p>
+
+    <h2 style="margin-top:18px">Tips</h2>
+    <dl class="faq">
+        <div class="qa">
+            <dt>Mute a plugin with a footswitch</dt>
+            <dd>Open the mixer&rsquo;s settings with the cogwheel above the pedal and click the
+                assign icon next to that channel&rsquo;s <b>Mute</b>. Channels are numbered as on
+                the pedal (the number before each name). GAIN and PAN can go on knobs the
+                same way.</dd>
+        </div>
+        <div class="qa">
+            <dt>Snapshots remember the mix</dt>
+            <dd>Gains, pans and mutes are ordinary plugin settings, so a snapshot can switch
+                a whole mix at once &mdash; say, the looper louder for the solo.</dd>
+        </div>
+        <div class="qa">
+            <dt>Leave headroom</dt>
+            <dd>Several plugins at 0.0 add up. If the master meters touch red, lower MASTER
+                or the loudest rows rather than boosting the quiet ones.</dd>
+        </div>
+    </dl>
+</section>
+
+<section>
+    <h2>Installing the System Mixer</h2>
+    <p>
+        Download the build for your platform from the plugin&rsquo;s <b>GitHub Releases</b>
+        page: <code>sysmixer-vX.Y.Z-dwarf-aarch64.tar.gz</code> for the MOD&nbsp;Dwarf and
+        <code>sysmixer-vX.Y.Z-linux-amd64.tar.gz</code> for MOD&nbsp;Desktop.
+    </p>
+
+    <h3>MOD Desktop (Linux)</h3>
+    <ol class="steps">
+        <li>Extract the archive: <code>tar xzf sysmixer-vX.Y.Z-linux-amd64.tar.gz</code></li>
+        <li>Move the extracted <code>sysmixer.lv2</code> folder into
+            <code>~/Documents/MOD Desktop/lv2/</code></li>
+        <li>Restart MOD Desktop. The System Mixer appears under the brand <b>Stefan</b>.</li>
+    </ol>
+
+    <h3>MOD Dwarf</h3>
+    <ol class="steps">
+        <li>Connect the Dwarf over USB and extract the Dwarf archive on your computer.</li>
+        <li>Copy the bundle onto the unit:
+            <pre>scp -O -r sysmixer.lv2 root@192.168.51.1:/root/.lv2/</pre></li>
+        <li>Restart the audio services (or simply reboot the Dwarf):
+            <pre>ssh root@192.168.51.1 'systemctl restart jack2 mod-ui'</pre></li>
+        <li>Hard-refresh the MOD web interface in your browser (<b>Ctrl-Shift-R</b>).</li>
+    </ol>
+
+    <h2 class="pb" style="margin-top:0">Questions &amp; answers</h2>
+    <dl class="faq">
+        <div class="qa">
+            <dt>I don&rsquo;t see &ldquo;Send to mixer&rdquo; when I right-click.</dt>
+            <dd>The menu comes from the mixer, so a System Mixer has to be on the
+                pedalboard. Right-click the plugin&rsquo;s body rather than a jack with
+                cables (that opens the cable menu), and note that plugins without audio
+                outputs, such as MIDI tools, have nothing to send.</dd>
+        </div>
+        <div class="qa">
+            <dt>A plugin went quiet after I removed it.</dt>
+            <dd>That is on purpose: removing only unplugs it from the mixer. Send it again,
+                or cable it wherever you want it.</dd>
+        </div>
+        <div class="qa">
+            <dt>Does it work without the starless firmware?</dt>
+            <dd>Yes. The mixer, the menu and the rows work on any MOD; only the automatic
+                teleports need starless, so elsewhere sends are ordinary cables.</dd>
+        </div>
+        <div class="qa">
+            <dt>A plugin has more than two outputs.</dt>
+            <dd>Send to mixer takes its first two. Cable any others by hand.</dd>
+        </div>
+        <div class="qa">
+            <dt>Can I use two System Mixers?</dt>
+            <dd>You can, but only the first one on the board answers the right-click menu.
+                Send to the second with its <b>+</b> button.</dd>
+        </div>
+    </dl>
+
+    <h2 style="margin-top:16px">Specifications</h2>
+    <table>
+        <tr><th style="width:34%">Format</th><td>LV2 audio plugin, 16 stereo inputs &rarr; stereo out</td></tr>
+        <tr><th>Platforms</th><td>MOD Dwarf (aarch64), MOD Desktop (Linux x86_64)</td></tr>
+        <tr><th>Per channel</th><td>Gain &minus;60&hellip;+12&nbsp;dB (bottom = off), pan, mute, meter</td></tr>
+        <tr><th>Master</th><td>Gain &minus;60&hellip;+12&nbsp;dB, left/right meters</td></tr>
+        <tr><th>Pan</th><td>Mono: constant power (&minus;3&nbsp;dB at centre). Stereo: balance.</td></tr>
+        <tr><th>Processing cost</th><td>About 31&nbsp;&micro;s per 128-sample block on a MOD Dwarf
+            (about 1.2&nbsp;% of the audio period), whether 1 or 16 channels are in use</td></tr>
+        <tr><th>Latency</th><td>None</td></tr>
+    </table>
+
+    <p class="credits">
+        The System Mixer is free software built with the DISTRHO Plugin Framework.
+        Manual edition November 2026 &mdash; for the plugin version it shipped with;
+        see the GitHub release page for the latest.
+    </p>
+</section>
+
+</body>
+</html>

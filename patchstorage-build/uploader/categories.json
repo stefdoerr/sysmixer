@@ -1,0 +1,46 @@
+{
+    "117": [
+        "ps:utility",
+        "MIDI",
+        "Limiter",
+        "Gate",
+        "Utility",
+        "Mixer",
+        "Analyser",
+        "Amplifier",
+        "Modulator",
+        "Equaliser",
+        "Expander",
+        "Dynamics",
+        "Converter",
+        "ControlVoltage"
+    ],
+    "77": [
+        "ps:effect",
+        "Bandpass",
+        "Filter",
+        "Delay",
+        "Reverb",
+        "Distortion",
+        "Phaser",
+        "Chorus",
+        "Pitch Shifter",
+        "Spatial",
+        "Flanger",
+        "Compressor",
+        "Highpass",
+        "Lowpass",
+        "Parametric",
+        "Simulator",
+        "Spectral",
+        "Waveshaper",
+        "Multiband"
+    ],
+    "74": [
+        "ps:synthesizer",
+        "Oscillator",
+        "Synthesizer",
+        "Instrument",
+        "Generator"
+    ]
+}

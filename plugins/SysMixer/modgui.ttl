@@ -1,0 +1,88 @@
+@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://stefan.local/plugins/sysmixer>
+    modgui:gui [
+        modgui:resourcesDirectory <modgui> ;
+        modgui:iconTemplate       <modgui/icon-sysmixer.html> ;
+        modgui:stylesheet         <modgui/stylesheet-sysmixer.css> ;
+        modgui:javascript         <modgui/script-sysmixer.js> ;
+        modgui:documentation      <modgui/manual.pdf> ;
+        # REQUIRED: MOD Desktop's scanner segfaults without these.
+        modgui:screenshot         <modgui/screenshot-sysmixer.png> ;
+        modgui:thumbnail          <modgui/thumbnail-sysmixer.png> ;
+        modgui:brand "Stefan" ;
+        modgui:label "System Mixer" ;
+        modgui:port
+        [ lv2:index 0 ; lv2:symbol "gain1" ; lv2:name "Gain 1" ] ,
+        [ lv2:index 1 ; lv2:symbol "pan1" ; lv2:name "Pan 1" ] ,
+        [ lv2:index 2 ; lv2:symbol "mute1" ; lv2:name "Mute 1" ] ,
+        [ lv2:index 3 ; lv2:symbol "gain2" ; lv2:name "Gain 2" ] ,
+        [ lv2:index 4 ; lv2:symbol "pan2" ; lv2:name "Pan 2" ] ,
+        [ lv2:index 5 ; lv2:symbol "mute2" ; lv2:name "Mute 2" ] ,
+        [ lv2:index 6 ; lv2:symbol "gain3" ; lv2:name "Gain 3" ] ,
+        [ lv2:index 7 ; lv2:symbol "pan3" ; lv2:name "Pan 3" ] ,
+        [ lv2:index 8 ; lv2:symbol "mute3" ; lv2:name "Mute 3" ] ,
+        [ lv2:index 9 ; lv2:symbol "gain4" ; lv2:name "Gain 4" ] ,
+        [ lv2:index 10 ; lv2:symbol "pan4" ; lv2:name "Pan 4" ] ,
+        [ lv2:index 11 ; lv2:symbol "mute4" ; lv2:name "Mute 4" ] ,
+        [ lv2:index 12 ; lv2:symbol "gain5" ; lv2:name "Gain 5" ] ,
+        [ lv2:index 13 ; lv2:symbol "pan5" ; lv2:name "Pan 5" ] ,
+        [ lv2:index 14 ; lv2:symbol "mute5" ; lv2:name "Mute 5" ] ,
+        [ lv2:index 15 ; lv2:symbol "gain6" ; lv2:name "Gain 6" ] ,
+        [ lv2:index 16 ; lv2:symbol "pan6" ; lv2:name "Pan 6" ] ,
+        [ lv2:index 17 ; lv2:symbol "mute6" ; lv2:name "Mute 6" ] ,
+        [ lv2:index 18 ; lv2:symbol "gain7" ; lv2:name "Gain 7" ] ,
+        [ lv2:index 19 ; lv2:symbol "pan7" ; lv2:name "Pan 7" ] ,
+        [ lv2:index 20 ; lv2:symbol "mute7" ; lv2:name "Mute 7" ] ,
+        [ lv2:index 21 ; lv2:symbol "gain8" ; lv2:name "Gain 8" ] ,
+        [ lv2:index 22 ; lv2:symbol "pan8" ; lv2:name "Pan 8" ] ,
+        [ lv2:index 23 ; lv2:symbol "mute8" ; lv2:name "Mute 8" ] ,
+        [ lv2:index 24 ; lv2:symbol "gain9" ; lv2:name "Gain 9" ] ,
+        [ lv2:index 25 ; lv2:symbol "pan9" ; lv2:name "Pan 9" ] ,
+        [ lv2:index 26 ; lv2:symbol "mute9" ; lv2:name "Mute 9" ] ,
+        [ lv2:index 27 ; lv2:symbol "gain10" ; lv2:name "Gain 10" ] ,
+        [ lv2:index 28 ; lv2:symbol "pan10" ; lv2:name "Pan 10" ] ,
+        [ lv2:index 29 ; lv2:symbol "mute10" ; lv2:name "Mute 10" ] ,
+        [ lv2:index 30 ; lv2:symbol "gain11" ; lv2:name "Gain 11" ] ,
+        [ lv2:index 31 ; lv2:symbol "pan11" ; lv2:name "Pan 11" ] ,
+        [ lv2:index 32 ; lv2:symbol "mute11" ; lv2:name "Mute 11" ] ,
+        [ lv2:index 33 ; lv2:symbol "gain12" ; lv2:name "Gain 12" ] ,
+        [ lv2:index 34 ; lv2:symbol "pan12" ; lv2:name "Pan 12" ] ,
+        [ lv2:index 35 ; lv2:symbol "mute12" ; lv2:name "Mute 12" ] ,
+        [ lv2:index 36 ; lv2:symbol "gain13" ; lv2:name "Gain 13" ] ,
+        [ lv2:index 37 ; lv2:symbol "pan13" ; lv2:name "Pan 13" ] ,
+        [ lv2:index 38 ; lv2:symbol "mute13" ; lv2:name "Mute 13" ] ,
+        [ lv2:index 39 ; lv2:symbol "gain14" ; lv2:name "Gain 14" ] ,
+        [ lv2:index 40 ; lv2:symbol "pan14" ; lv2:name "Pan 14" ] ,
+        [ lv2:index 41 ; lv2:symbol "mute14" ; lv2:name "Mute 14" ] ,
+        [ lv2:index 42 ; lv2:symbol "gain15" ; lv2:name "Gain 15" ] ,
+        [ lv2:index 43 ; lv2:symbol "pan15" ; lv2:name "Pan 15" ] ,
+        [ lv2:index 44 ; lv2:symbol "mute15" ; lv2:name "Mute 15" ] ,
+        [ lv2:index 45 ; lv2:symbol "gain16" ; lv2:name "Gain 16" ] ,
+        [ lv2:index 46 ; lv2:symbol "pan16" ; lv2:name "Pan 16" ] ,
+        [ lv2:index 47 ; lv2:symbol "mute16" ; lv2:name "Mute 16" ] ,
+        [ lv2:index 48 ; lv2:symbol "master" ; lv2:name "Master" ] ;
+        # Output ports mod-ui streams to the pedal's JS ('change' events):
+        # meters.
+        modgui:monitoredOutputs
+        [ lv2:symbol "level1" ] ,
+        [ lv2:symbol "level2" ] ,
+        [ lv2:symbol "level3" ] ,
+        [ lv2:symbol "level4" ] ,
+        [ lv2:symbol "level5" ] ,
+        [ lv2:symbol "level6" ] ,
+        [ lv2:symbol "level7" ] ,
+        [ lv2:symbol "level8" ] ,
+        [ lv2:symbol "level9" ] ,
+        [ lv2:symbol "level10" ] ,
+        [ lv2:symbol "level11" ] ,
+        [ lv2:symbol "level12" ] ,
+        [ lv2:symbol "level13" ] ,
+        [ lv2:symbol "level14" ] ,
+        [ lv2:symbol "level15" ] ,
+        [ lv2:symbol "level16" ] ,
+        [ lv2:symbol "level_l" ] ,
+        [ lv2:symbol "level_r" ]
+    ] .
