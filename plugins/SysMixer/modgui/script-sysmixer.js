@@ -350,12 +350,25 @@ function (event, funcs) {
             else menu.append(nodes);
         }
 
-        // Right-click a plugin. A port menu (ports with cables) runs first and stops the
-        // event, so this only sees plugin bodies and free ports. If MOD-UI opened a
-        // plugin menu of its own for this click, we join it; otherwise we open ours.
-        // Decided a tick later, so it does not matter which handler MOD-UI runs first.
+        // Only a right-click on a pedal's background counts; one on a control (knob,
+        // value, footswitch, port, form element, or anything showing a hand cursor) is
+        // left for that control. Same rule as starless's plugin menu.
+        var CONTROLS = '[mod-role=input-control-port], [mod-role=input-control-value], ' +
+                       '[mod-role=bypass], [mod-role=presets], [mod-port], [mod-role=output-jack], ' +
+                       'input, select, textarea, button, a, [contenteditable]';
+        function onBackground(target, pedalEl) {
+            if ($(target).closest(CONTROLS, pedalEl).length) return false;
+            for (var n = target; n && n !== pedalEl; n = n.parentNode) {
+                if (n.nodeType === 1 && window.getComputedStyle(n).cursor === 'pointer') return false;
+            }
+            return true;
+        }
+
+        // Right-click a plugin's background. If MOD-UI opened a plugin menu of its own
+        // for this click, we join it; otherwise we open ours. Decided a tick later, so it
+        // does not matter which handler MOD-UI runs first.
         pb.on('contextmenu' + d.ns, '[mod-instance]', function (e) {
-            if (!ownsMenu()) return;
+            if (!ownsMenu() || !onBackground(e.target, this)) return;
             var instance = $(this).attr('mod-instance');
             if (instance === me || !audioOutputs($(this)).length) return;
             e.preventDefault();
