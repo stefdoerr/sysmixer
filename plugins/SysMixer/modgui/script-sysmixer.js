@@ -13,7 +13,9 @@
  * `desktop`, the [mod-instance] / [mod-port] attributes, cables living inside
  * the input they plug into with data('origin') pointing at their output, the
  * pedalboard's connectionManager, and the /effect/connect|disconnect endpoints
- * the UI itself uses. On starless it also calls toggleTeleport so a send shows
+ * the UI itself uses. Where MOD-UI opens a plugin menu of its own (starless), the
+ * mixer's entries join it instead of opening a second menu. On starless it also
+ * calls toggleTeleport so a send shows
  * as a named teleport instead of a cable across the board. Whatever is missing,
  * routing quietly does less; the audio never depends on any of it.
  */
@@ -320,18 +322,49 @@ function (event, funcs) {
             return pb.find('.sysmixer-pedal').first().closest('[mod-instance]').attr('mod-instance') === me;
         }
 
-        // Right-click a plugin. Starless's own port menu (ports with cables) runs
-        // first and stops the event, so this only sees plugin bodies and free ports.
+        function menuItems(instance) {
+            var ch = channelOf(instance);
+            return ch
+                ? [['Remove from mixer (channel ' + ch + ')', function () { unsend(instance); }]]
+                : [['Send to mixer', function () { send(instance); }]];
+        }
+
+        // Our items as a group inside a plugin menu MOD-UI itself opened (starless):
+        // right after the plugin's first group (Settings / Info / Bypass), styled and
+        // closed the way that menu's own rows are.
+        function joinMenu(menu, items) {
+            var close = function () {
+                menu.remove();
+                $(document).off('.portcontextmenu');
+            };
+            var nodes = [$('<hr class="mod-contextmenu-separator">')];
+            items.forEach(function (it) {
+                nodes.push($('<div>').text(it[0]).on('click', function (e) {
+                    e.stopPropagation();
+                    close();
+                    it[1]();
+                }));
+            });
+            var firstBreak = menu.children('hr').first();
+            if (firstBreak.length) firstBreak.before(nodes);
+            else menu.append(nodes);
+        }
+
+        // Right-click a plugin. A port menu (ports with cables) runs first and stops the
+        // event, so this only sees plugin bodies and free ports. If MOD-UI opened a
+        // plugin menu of its own for this click, we join it; otherwise we open ours.
+        // Decided a tick later, so it does not matter which handler MOD-UI runs first.
         pb.on('contextmenu' + d.ns, '[mod-instance]', function (e) {
             if (!ownsMenu()) return;
             var instance = $(this).attr('mod-instance');
             if (instance === me || !audioOutputs($(this)).length) return;
             e.preventDefault();
-            e.stopPropagation();
-            var ch = channelOf(instance);
-            showMenu(e.clientX, e.clientY, ch
-                ? [['Remove from mixer (channel ' + ch + ')', function () { unsend(instance); }]]
-                : [['Send to mixer', function () { send(instance); }]]);
+            var x = e.clientX, y = e.clientY;
+            setTimeout(function () {
+                var theirs = $('.mod-port-contextmenu');
+                if (theirs.length) joinMenu(theirs.last(), menuItems(instance));
+                else showMenu(x, y, menuItems(instance));
+            }, 0);
         });
 
         // "+": every plugin with audio outputs not yet in the mixer.
