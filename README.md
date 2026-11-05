@@ -43,7 +43,6 @@ blocks at 48 kHz, every input fed with noise, median per block.
 |---|---|---|
 | MOD Mixer (mono) | 4 mono | 140 µs |
 | MOD Mixer Stereo | 4 stereo | 287 µs |
-| ABotte Sounds mixer-4x2 | 4 stereo | 58 µs |
 | **System Mixer** | **16 stereo** | **31 µs** (about 1.2 % of the audio period) |
 
 ## Install
